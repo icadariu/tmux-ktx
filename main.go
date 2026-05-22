@@ -14,25 +14,40 @@ var (
 	buildTime = "unknown"
 )
 
+func formatVersion(name, version, buildTime, commit string) string {
+	return fmt.Sprintf("%s %s (built %s, commit %s)", name, version, buildTime, commit)
+}
+
 func printVersion() {
-	fmt.Printf("tmux-ktx %s (built %s, commit %s)\n", version, buildTime, commit)
+	fmt.Println(formatVersion("tmux-ktx", version, buildTime, commit))
+}
+
+func formatTmuxOutput(ctx, ns, ctxColor, nsColor string) string {
+	return fmt.Sprintf("#[fg=blue]⎈ #[fg=%s]%s#[fg=colour250]:#[fg=%s]%s", ctxColor, ctx, nsColor, ns)
+}
+
+func isVersionRequest(args []string) bool {
+	if len(args) < 2 {
+		return false
+	}
+	for _, a := range args[1:] {
+		switch a {
+		case "version", "-version", "--version":
+			return true
+		}
+	}
+	return false
 }
 
 func main() {
-	if len(os.Args) > 1 && os.Args[1] == "version" {
+	if isVersionRequest(os.Args) {
 		printVersion()
 		return
 	}
 
-	showVersion := flag.Bool("version", false, "print version and exit")
 	ctxColor := flag.String("ctx-color", "default", "tmux color for the kubernetes context")
 	nsColor := flag.String("ns-color", "default", "tmux color for the kubernetes namespace")
 	flag.Parse()
-
-	if *showVersion {
-		printVersion()
-		return
-	}
 
 	// KUBECONFIG can be passed as a positional argument after flags
 	if flag.NArg() > 0 && flag.Arg(0) != "" {
@@ -44,5 +59,5 @@ func main() {
 		os.Exit(0)
 	}
 
-	fmt.Printf("#[fg=blue]⎈ #[fg=%s]%s#[fg=colour250]:#[fg=%s]%s", *ctxColor, ctx, *nsColor, ns)
+	fmt.Print(formatTmuxOutput(ctx, ns, *ctxColor, *nsColor))
 }
