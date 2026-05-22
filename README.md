@@ -19,11 +19,38 @@
 * Go 1.23+
 * tmux
 
-## Build
+## Build & Install
+
+Build a local binary in the repo root:
 
 ```bash
-go build -o tmux-ktx .
+make build
 ```
+
+Install into your Go bin directory (`$GOBIN`, or `$(go env GOPATH)/bin` if `GOBIN` is unset):
+
+```bash
+make install
+```
+
+Make sure that directory is on your `$PATH`. Override defaults if needed:
+
+```bash
+make install LDFLAGS='-s -w' GOFLAGS='-trimpath'
+```
+
+Other targets: `make test`, `make fmt`, `make vet`, `make clean`.
+
+## Updating
+
+Dependabot opens PRs that bump Go modules and GitHub Actions in this repo. Once those PRs merge into `main`, refresh your local binary:
+
+```bash
+git pull --ff-only
+make install
+```
+
+This rebuilds `tmux-ktx` against the latest merged module versions and replaces the binary in `$(go env GOPATH)/bin`.
 
 ## How it works
 
@@ -88,7 +115,7 @@ set -g status-right "#(myPath/tmux-ktx -ctx-color green -ns-color red #{@ktx_kub
 set -g status-interval 5
 ```
 
-> **Note:** Use full path since tmux does not expand `~` in shell command substitutions.
+> **Note:** Use the full path since tmux does not expand `~` or `$GOPATH` in shell command substitutions. If you installed via `make install`, the binary lives at `$(go env GOPATH)/bin/tmux-ktx` — substitute that absolute path for `myPath/tmux-ktx` above.
 
 The plugin reads `KUBECONFIG` from the pane option set by the shell hook. If the option is
 empty, it falls back to `~/.kube/config`. When no context is configured, nothing is displayed
