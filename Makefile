@@ -1,19 +1,27 @@
-CMD_PKG ?= .
+MAIN    ?= .
 BIN     ?= tmux-ktx
 GOFLAGS ?=
-LDFLAGS ?= -s -w
+
+VERSION   ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
+COMMIT    ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo none)
+BUILDTIME ?= $(shell date +%y-%m-%d_%H:%M)
+
+LDFLAGS ?= -ldflags '-s -w -X main.version=$(VERSION) -X main.commit=$(COMMIT) -X main.buildTime=$(BUILDTIME)'
 
 .DEFAULT_GOAL := help
-.PHONY: help build install test fmt vet clean
+.PHONY: help build install test fmt vet clean version
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "; printf "Usage: make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 build: ## Build the binary into ./$(BIN)
-	go build $(GOFLAGS) -ldflags '$(LDFLAGS)' -o $(BIN) $(CMD_PKG)
+	go build $(GOFLAGS) $(LDFLAGS) -o $(BIN) $(MAIN)
 
-install: ## Install the binary into $$GOPATH/bin
-	go install $(GOFLAGS) -ldflags '$(LDFLAGS)' $(CMD_PKG)
+install: ## Install latest into $$GOPATH/bin
+	go install $(GOFLAGS) $(LDFLAGS) $(MAIN)
+
+version: ## Print the version that would be embedded
+	@echo "$(BIN) $(VERSION) (built $(BUILDTIME), commit $(COMMIT))"
 
 test: ## Run all Go tests
 	go test ./...
