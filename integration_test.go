@@ -50,24 +50,16 @@ func runBinary(t *testing.T, args ...string) (string, string, int) {
 	return stdout.String(), stderr.String(), exit
 }
 
-func TestVersionSubcommandPrintsKdiagFormat(t *testing.T) {
-	stdout, stderr, exit := runBinary(t, "version")
+func TestVersionFlagPrintsCanonicalFormat(t *testing.T) {
+	stdout, stderr, exit := runBinary(t, "--version")
 	if exit != 0 {
 		t.Fatalf("exit %d, stderr=%q", exit, stderr)
 	}
 	line := strings.TrimRight(stdout, "\n")
-	// Expected shape: "tmux-ktx <git-describe> (built <YY-MM-DD_HH:MM>, commit <sha>)"
-	re := regexp.MustCompile(`^tmux-ktx \S+ \(built \S+, commit \S+\)$`)
+	// Expected shape: "<version> (built <YY-MM-DD_HH:MM>, commit <sha>)" (no app name)
+	re := regexp.MustCompile(`^\S+ \(built \S+, commit \S+\)$`)
 	if !re.MatchString(line) {
-		t.Errorf("version line %q does not match kdiag format %q", line, re)
-	}
-}
-
-func TestVersionLongFlagMatchesSubcommand(t *testing.T) {
-	subOut, _, _ := runBinary(t, "version")
-	flagOut, _, _ := runBinary(t, "--version")
-	if subOut != flagOut {
-		t.Errorf("`version` and `--version` produced different output:\n  sub:  %q\n  flag: %q", subOut, flagOut)
+		t.Errorf("version line %q does not match canonical format %q", line, re)
 	}
 }
 

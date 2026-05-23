@@ -14,34 +14,26 @@ var (
 	buildTime = "unknown"
 )
 
-func formatVersion(name, version, buildTime, commit string) string {
-	return fmt.Sprintf("%s %s (built %s, commit %s)", name, version, buildTime, commit)
-}
-
-func printVersion() {
-	fmt.Println(formatVersion("tmux-ktx", version, buildTime, commit))
-}
-
-func formatTmuxOutput(ctx, ns, ctxColor, nsColor string) string {
-	return fmt.Sprintf("#[fg=blue]⎈ #[fg=%s]%s#[fg=colour250]:#[fg=%s]%s", ctxColor, ctx, nsColor, ns)
-}
-
-func isVersionRequest(args []string) bool {
-	if len(args) < 2 {
-		return false
-	}
-	for _, a := range args[1:] {
-		switch a {
-		case "version", "-version", "--version":
+// HandleVersionFlag prints the version line and returns true if --version
+// (or -version) was passed. Call at the top of main():
+//
+//	if HandleVersionFlag() { return }
+func HandleVersionFlag() bool {
+	for _, a := range os.Args[1:] {
+		if a == "--version" || a == "-version" {
+			fmt.Printf("%s (built %s, commit %s)\n", version, buildTime, commit)
 			return true
 		}
 	}
 	return false
 }
 
+func formatTmuxOutput(ctx, ns, ctxColor, nsColor string) string {
+	return fmt.Sprintf("#[fg=blue]⎈ #[fg=%s]%s#[fg=colour250]:#[fg=%s]%s", ctxColor, ctx, nsColor, ns)
+}
+
 func main() {
-	if isVersionRequest(os.Args) {
-		printVersion()
+	if HandleVersionFlag() {
 		return
 	}
 
