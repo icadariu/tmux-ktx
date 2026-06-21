@@ -45,7 +45,7 @@ stdout             →  "#[fg=blue]⎈ #[fg=green]ctx#[fg=colour250]:#[fg=red]ns
 
 ### Package layout
 
-- `main.go` — CLI surface: flags (`-ctx-color`, `-ns-color`, `--version`), `version` subcommand, KUBECONFIG positional arg, final tmux-formatted printf. The `version`/`commit`/`buildTime` package vars are populated by `-ldflags`.
+- `main.go` — CLI surface: flags (`-ctx-color`, `-ns-color`, `--version`), KUBECONFIG positional arg, final tmux-formatted printf. The `version`/`commit`/`buildTime` package vars are populated by `-ldflags`.
 - `internal/kube/config.go` — kubeconfig parsing. Reads files listed in `KUBECONFIG` (or `~/.kube/config`), merges contexts, returns `(context, namespace, err)`. Missing files and invalid YAML are swallowed (continue) — never errored — because a broken config file in a multi-file `KUBECONFIG` chain must not break the display.
 - `internal/kube/config_test.go` — table-driven tests covering merge precedence, missing files, invalid YAML, default namespace fallback, and unknown current-context.
 
