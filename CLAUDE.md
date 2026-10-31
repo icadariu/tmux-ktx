@@ -31,7 +31,7 @@ This is a single-binary tmux plugin invoked **per-pane on every status refresh**
 ```
 zsh precmd hook  →  tmux set-option -p @ktx_kubeconfig "$KUBECONFIG"
                                  ↓
-tmux status-right  →  tmux-ktx -ctx-color green -ns-color red #{@ktx_kubeconfig}
+tmux status-right  →  tmux-ktx -ctx-color green -ns-color red #{q:@ktx_kubeconfig}
                                  ↓
 main.go            →  os.Setenv("KUBECONFIG", flag.Arg(0))   ← positional arg → env var
                                  ↓

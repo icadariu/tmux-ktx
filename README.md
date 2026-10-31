@@ -141,7 +141,7 @@ kind-kind:my-namespace
 
 ## Milestones
 
-### 1. Functional go app ✓
+### 1. Functional go app (done)
 
 * The plugin can:
   * Fetch current kube context based on `KUBECONFIG` (or fallback to `~/.kube/config`)
@@ -155,7 +155,7 @@ kind-kind:my-namespace
 
 * Supports multiple kubeconfig files via colon-separated `KUBECONFIG` — contexts are merged, first `current-context` wins.
 
-### 2. Release ✓
+### 2. Release (done)
 
 Released as [v0.1.0](https://github.com/icadariu/tmux-ktx/releases/tag/v0.1.0): prebuilt
 binaries for linux and darwin (amd64, arm64) with checksums, published by CI from a signed
