@@ -175,3 +175,4 @@ it: install the binary, add the shell hook to `~/.zshrc` and the configuration t
   * <https://github.com/thecasualcoder/kube-tmuxp>
   * <https://github.com/uesyn/tmux-kubecontext>
   * <https://github.com/kr3cj/tmux-kube>
+* How tmux-ktx compares with them: [docs/alternatives.md](docs/alternatives.md).
