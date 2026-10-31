@@ -1,0 +1,29 @@
+name: Bug
+description: File a bug/issue
+title: '[BUG] <title>'
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        Briefly describe the problem you are having.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps To Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Run this
+        2. Expected X
+        3. Receive Z
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Anything else?
+      description: |
+        Anything not included in the previous steps
+    validations:
+      required: false

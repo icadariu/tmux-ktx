@@ -1,0 +1,12 @@
+name: Feature request
+description: Missing functionality? Come tell us about it!
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: what
+      description: What is the feature you want to see?
+    validations:
+      required: true
