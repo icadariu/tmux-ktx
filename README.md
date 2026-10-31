@@ -27,9 +27,16 @@ Terminal replay of the same demo: `asciinema play docs/demo.cast`
 ## Install
 
 Download the archive for your OS and architecture (linux or darwin, amd64 or
-arm64) from the [latest release](https://github.com/icadariu/tmux-ktx/releases/latest),
-check it against `checksums.txt`, and put `tmux-ktx` somewhere tmux can run it
-by absolute path. Or build from source as below.
+arm64) from the [latest release](https://github.com/icadariu/tmux-ktx/releases/latest)
+and check it against `checksums.txt`. The checksums sit in the same release, so they
+catch a corrupt download, not a tampered release; also verify that this repository's
+release workflow built the archive:
+
+```bash
+gh attestation verify tmux-ktx_<version>_<os>_<arch>.tar.gz -R icadariu/tmux-ktx
+```
+
+Put `tmux-ktx` somewhere tmux can run it by absolute path, or build from source as below.
 
 ## Build & Install
 
