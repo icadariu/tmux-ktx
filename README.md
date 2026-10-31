@@ -157,7 +157,7 @@ kind-kind:my-namespace
 
 ### 2. Release (done)
 
-Released as [v0.1.0](https://github.com/icadariu/tmux-ktx/releases/tag/v0.1.0): prebuilt
+Released as [v0.1.1](https://github.com/icadariu/tmux-ktx/releases/tag/v0.1.1): prebuilt
 binaries for linux and darwin (amd64, arm64) with checksums, published by CI from a signed
 tag. New versions follow [RELEASING.md](RELEASING.md). No TPM packaging is required to use
 it: install the binary, add the shell hook to `~/.zshrc` and the configuration to
