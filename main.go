@@ -25,6 +25,7 @@ func main() {
 	flag.Parse()
 
 	// KUBECONFIG can be passed as a positional argument after flags
+	// empty arg: the pane never ran the hook, so keep the KUBECONFIG it inherited from tmux
 	if flag.NArg() > 0 && flag.Arg(0) != "" {
 		_ = os.Setenv("KUBECONFIG", flag.Arg(0))
 	}

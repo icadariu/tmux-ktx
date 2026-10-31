@@ -71,7 +71,7 @@ export KUBECONFIG=~/.kube/prod.yaml   ← you run this in a pane
         │
         ▼
 zsh precmd hook (fires after every prompt)
-  tmux set-option -p @ktx_kubeconfig "$KUBECONFIG"
+  tmux set-option -p @ktx_kubeconfig "${KUBECONFIG:-$HOME/.kube/config}"
         │  stores the value as a per-pane tmux option
         ▼
 tmux status-right / pane-border-format
@@ -105,10 +105,9 @@ Add the following one-liner to your `~/.zshrc`:
 # tmux-ktx: keep pane option in sync with KUBECONFIG
 _tmux_ktx_hook() {
   [[ -z "$TMUX" ]] && return
-  local current="${KUBECONFIG:-}"
-  [[ "$current" == "$_tmux_ktx_last" ]] && return
-  _tmux_ktx_last="$current"
-  tmux set-option -p @ktx_kubeconfig "$current" 2>/dev/null
+  # Write on every prompt: a nested shell (kubie, zsh) may have changed the
+  # option. Unset or empty KUBECONFIG means kubectl reads ~/.kube/config.
+  tmux set-option -p @ktx_kubeconfig "${KUBECONFIG:-$HOME/.kube/config}" 2>/dev/null
 }
 precmd_functions+=(_tmux_ktx_hook)
 ```
@@ -130,8 +129,9 @@ set -g status-interval 5
 > **Note:** Use the full path since tmux does not expand `~` or `$GOPATH` in shell command substitutions. If you installed via `make install`, the binary lives at `$(go env GOPATH)/bin/tmux-ktx` — substitute that absolute path for `myPath/tmux-ktx` above.
 
 The plugin reads `KUBECONFIG` from the pane option set by the shell hook. If the option is
-empty, it falls back to `~/.kube/config`. When no context is configured, nothing is displayed
-and the plugin exits cleanly.
+empty (the hook has not run in that pane, for example a window started straight into `k9s`),
+it uses the `KUBECONFIG` that pane inherited from the tmux server, then `~/.kube/config`.
+When no context is configured, nothing is displayed and the plugin exits cleanly.
 
 Example output in the status bar:
 

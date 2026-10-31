@@ -59,10 +59,7 @@ setopt interactive_comments
 PROMPT='%F{green}~/work%f %# '
 _tmux_ktx_hook() {
   [[ -z "\$TMUX" ]] && return
-  local current="\${KUBECONFIG:-}"
-  [[ "\$current" == "\$_tmux_ktx_last" ]] && return
-  _tmux_ktx_last="\$current"
-  tmux set-option -p @ktx_kubeconfig "\$current" 2>/dev/null
+  tmux set-option -p @ktx_kubeconfig "\${KUBECONFIG:-\$HOME/.kube/config}" 2>/dev/null
 }
 precmd_functions+=(_tmux_ktx_hook)
 EOF

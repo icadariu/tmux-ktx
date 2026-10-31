@@ -29,7 +29,7 @@ This is a single-binary tmux plugin invoked **per-pane on every status refresh**
 ### Flow
 
 ```
-zsh precmd hook  →  tmux set-option -p @ktx_kubeconfig "$KUBECONFIG"
+zsh precmd hook  →  tmux set-option -p @ktx_kubeconfig "${KUBECONFIG:-$HOME/.kube/config}"
                                  ↓
 tmux status-right  →  tmux-ktx -ctx-color green -ns-color red #{q:@ktx_kubeconfig}
                                  ↓
@@ -55,3 +55,4 @@ stdout             →  "#[fg=blue]⎈ #[fg=green]ctx#[fg=colour250]:#[fg=red]ns
 - Namespace falls back to `"default"` when omitted in the kubeconfig OR when `current-context` points to an unknown context.
 - Empty `current-context` returns `("", "", nil)` — main.go treats this as "exit silently".
 - `KUBECONFIG` unset → falls back to `~/.kube/config`.
+- Empty or missing positional arg → main.go keeps the `KUBECONFIG` inherited from the tmux server. Deliberate: that is what a pane that never ran the hook (e.g. a window started straight into `k9s`) uses. Do not make the argument override it unconditionally.
